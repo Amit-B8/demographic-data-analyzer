@@ -10,19 +10,18 @@ def calculate_demographic_data(print_data=True):
 
     # What is the average age of men?
     average_age_men = round(df[df['sex'] == 'Male']['age'].mean(), 1)
-
     # What is the percentage of people who have a Bachelor's degree?
     percentage_bachelors = round((df[df['education'] == 'Bachelors'].shape[0] / df.shape[0]) * 100, 1)
 
-    # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
-    # What percentage of people without advanced education make more than 50K?
+    # This will check what percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
+    # Checks what percentage of people without advanced education make more than 50K?
     # with `Bachelors`, `Masters`, or `Doctorate`
     higher_education = df[df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
     # ~ means not in Pandas so this is opposite of above
     lower_education = df[~df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])]
 
-    # percentage with salary >50K
-    # Take the higher education group and find who makes >50K
+    # percentage with salary > 50K
+    # Take the higher education group and find who makes > 50K
     rich_in_higher_ed = higher_education[higher_education['salary'] == '>50K']
     # Divide the number of rich people by the total number of people in that group
     rich_fraction = rich_in_higher_ed.shape[0] / higher_education.shape[0]
@@ -35,14 +34,14 @@ def calculate_demographic_data(print_data=True):
     # Multiply by 100 and round to one decimal
     lower_education_rich = round(rich_fraction_lower * 100, 1)
 
-    # What is the minimum number of hours a person works per week (hours-per-week feature)?
+    # What is the minimum number of hours a person works per week which is the hours-per-week feature
     min_work_hours = df['hours-per-week'].min()
 
-    # What percentage of the people who work the minimum number of hours per week have a salary of >50K?
+    # Checks what percentage of the people who work the minimum number of hours per week have a salary of > 50K 
     num_min_workers = df[df['hours-per-week'] == min_work_hours].shape[0]
     rich_percentage = round((df[(df['hours-per-week'] == min_work_hours) & (df['salary'] == '>50K')].shape[0] / num_min_workers) * 100, 1) if num_min_workers > 0 else 0
 
-    # What country has the highest percentage of people that earn >50K?
+    # checks what country has the highest percentage of people that earn >50K
     # Now you just extract the winner
     df['is_rich'] = df['salary'] == '>50K'
     stats = df.groupby('native-country')['is_rich'].mean() * 100
@@ -54,8 +53,6 @@ def calculate_demographic_data(print_data=True):
                      ['occupation']
                      .value_counts()
                      .idxmax())
-
-    # DO NOT MODIFY BELOW THIS LINE
 
     if print_data:
         print("Number of each race:\n", race_count) 
